@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قورئانی پیرۆز</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#071d19;color:#fff;
+ font-family:Arial,sans-serif;padding:20px;
+}
+header{text-align:center;padding:25px 10px}
+header h1{color:#d8bd75;font-size:30px}
+header p{color:#c4d4c9}
+.box{
+ background:#12352c;padding:18px;border-radius:18px;
+ margin:15px 0;border:1px solid #426453;
+}
+select,input{
+ width:100%;padding:14px;border-radius:12px;
+ border:1px solid #b49b5d;background:#09251e;
+ color:white;font-size:16px;margin-top:10px;
+}
+button{
+ background:#c3a65e;color:#10251d;border:0;
+ padding:13px;border-radius:12px;font-size:16px;
+ width:100%;margin-top:12px;font-weight:bold;
+}
+.ayah{
+ background:#12352c;border-radius:15px;
+ padding:20px;margin:12px 0;text-align:center;
+ border:1px solid #426453;
+}
+.arabic{font-size:27px;line-height:2.1;color:#fff0c9}
+.number{color:#d8bd75;margin-top:10px}
+#status{text-align:center;color:#e0c87f}
+footer{text-align:center;color:#b9c7be;margin:30px 0}
+</style>
+</head>
+<body>
+<header>
+<h1>☪ قورئانی پیرۆز</h1>
+<p>بە ناوی خوای گەورە و میهرەبان</p>
+<p>خوێندنەوەی قورئانی پیرۆز</p>
+</header>
+
+<div class="box">
+<h3>📖 سورەتی دڵخوازت هەڵبژێرە</h3>
+<select id="surah">
+<option>چاوەڕێ بکە...</option>
+</select>
+<button onclick="loadSurah()">خوێندنەوەی سورەت</button>
+</div>
+
+<div class="box">
+<h3>🔎 گەڕان بە ناوی سورەت</h3>
+<input id="search" placeholder="ناوی سورەت بنووسە...">
+<button onclick="searchSurah()">گەڕان</button>
+</div>
+
+<p id="status">چاوەڕێ بکە، زانیارییەکان بار دەکرێن...</p>
+<div id="content"></div>
+
+<footer>
+<p>قورئانی پیرۆز ☪</p>
+<p>دروستکراو بە خۆشەویستی بۆ خوێنەرانی قورئان</p>
+</footer>
+
+<script>
+let surahs=[];
+
+async function init(){
+ try{
+  const r=await fetch('https://api.alquran.cloud/v1/surah');
+  const d=await r.json();
+  surahs=d.data;
+  const s=document.getElementById('surah');
+  s.innerHTML='';
+  surahs.forEach(x=>{
+   let o=document.createElement('option');
+   o.value=x.number;
+   o.textContent=x.number+' - '+x.name+' ('+x.englishName+')';
+   s.appendChild(o);
+  });
+  document.getElementById('status').textContent=
+  '١١٤ سورەت ئامادەن ☪';
+  loadSurah();
+ }catch(e){
+  document.getElementById('status').textContent=
+  'پەیوەندی ئینتەرنێت بپشکنە و دووبارە هەوڵ بدەوە';
+ }
+}
+
+async function loadSurah(){
+ const n=document.getElementById('surah').value;
+ if(!n)return;
+ const c=document.getElementById('content');
+ c.innerHTML='';
+ document.getElementById('status').textContent='بارکردنی سورەت...';
+ try{
+  const r=await fetch(
+  'https://api.alquran.cloud/v1/surah/'+n+'/quran-uthmani');
+  const d=await r.json();
+  const surah=d.data;
+  document.getElementById('status').textContent=
+  surah.name+' - '+surah.numberOfAyahs+' ئایەت';
+  surah.ayahs.forEach(a=>{
+   const div=document.createElement('div');
+   div.className='ayah';
+   const t=document.createElement('div');
+   t.className='arabic';
+   t.textContent=a.text;
+   const num=document.createElement('div');
+   num.className='number';
+   num.textContent='﴿ '+a.numberInSurah+' ﴾';
+   div.appendChild(t);
+   div.appendChild(num);
+   c.appendChild(div);
+  });
+ }catch(e){
+  document.getElementById('status').textContent=
+  'نەتوانرا سورەت بار بکرێت. ئینتەرنێت بپشکنە.';
+ }
+}
+
+function searchSurah(){
+ const q=document.getElementById('search').value.trim();
+ const found=surahs.find(x=>
+ x.name.includes(q)||x.englishName.toLowerCase().includes(q.toLowerCase()));
+ if(found){
+  document.getElementById('surah').value=found.number;
+  loadSurah();
+ }else{
+  document.getElementById('status').textContent='سورەتەکە نەدۆزرایەوە';
+ }
+}
+
+init();
+</script>
+</body>
+</html>
+https://api.alquran.cloud/v1/surah
