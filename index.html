@@ -279,8 +279,20 @@ document.getElementById("back").onclick = () => {
 };
 
 loadSurahs();
-</script>
+</script>function increaseTasbih() {
+  document.getElementById("count").textContent =
+    Number(document.getElementById("count").textContent) + 1;
+}
 
+function resetTasbih() {
+  document.getElementById("count").textContent = 0;
+}
+<div id="tasbih" style="text-align:center; padding:20px;">
+  <h2>📿 تەسبیحات</h2>
+  <h1 id="count">0</h1>
+  <button onclick="increaseTasbih()">زیادکردن</button>
+  <button onclick="resetTasbih()">سفرکردنەوە</button>
+</div>
 </body>
 </html>
 test
