@@ -257,10 +257,9 @@ translation.className = "translation";
   audio.src = ayah.audio;
   audio.play();
 };
-          };
-        });
-      }
-    } catch (audioError) {
+});
+}
+} catch (audioError) {
       verses.querySelectorAll(".ayah button").forEach(button => {
         button.textContent = "دەنگ بەردەست نییە";
       });
