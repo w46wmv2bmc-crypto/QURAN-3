@@ -254,17 +254,8 @@ translation.className = "translation";
           play.textContent = "▶ گوێگرتن";
 
           play.onclick = () => {
-  if (audio.src === ayah.audio && !audio.paused) {
-    audio.pause();
-    play.textContent = "▶ بەردەوامبوون";
-  } else if (audio.src === ayah.audio && audio.paused) {
-    audio.play();
-    play.textContent = "⏸ وەستاندن";
-  } else {
-    audio.src = ayah.audio;
-    audio.play();
-    play.textContent = "⏸ وەستاندن";
-  }
+  audio.src = ayah.audio;
+  audio.play();
 };
           };
         });
