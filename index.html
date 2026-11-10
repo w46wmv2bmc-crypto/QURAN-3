@@ -173,7 +173,11 @@ async function openSurah(surah) {
       box.className = "ayah";
 
       const text = document.createElement("div");
-      text.textContent = ayah.text + " ۞ ";
+text.textContent = ayah.text + " ۞ ";
+
+const translation = document.createElement("p");
+translation.textContent = "وەرگێڕانی کوردی";
+translation.className = "translation";
 
       const number = document.createElement("p");
       number.textContent = "ئایەتی " + ayah.numberInSurah;
@@ -182,6 +186,8 @@ async function openSurah(surah) {
       play.textContent = "▶ چاوەڕێی دەنگ...";
 
       box.appendChild(text);
+      box.appendChild(translation);
+
       box.appendChild(number);
       box.appendChild(play);
       verses.appendChild(box);
