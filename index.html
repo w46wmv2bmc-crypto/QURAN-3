@@ -162,13 +162,17 @@ async function openSurah(surah) {
     );
 
     const textData = await textResponse.json();
-
+const translationResponse = await fetch(
+  "https://quranenc.com/api/v1/translation/sura/kurdish_bamoki/" + surah.number
+);
+const translationData = await translationResponse.json();
+    console.log(translationData);
     if (textData.code !== 200) throw new Error();
 
     verses.innerHTML = "";
 
     // دەقی ئایەتەکان نیشان دەدەین
-    textData.data.ayahs.forEach(ayah => {
+textData.data.ayahs.forEach((ayah, index) => {
       const box = document.createElement("div");
       box.className = "ayah";
 
@@ -176,7 +180,8 @@ async function openSurah(surah) {
 text.textContent = ayah.text + " ۞ ";
 
 const translation = document.createElement("p");
-translation.textContent = "وەرگێڕانی کوردی";
+translation.textContent =
+  translationData.result[index]?.translation || "وەرگێڕان بەردەست نییە";
 translation.className = "translation";
 
       const number = document.createElement("p");
