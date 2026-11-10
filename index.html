@@ -279,22 +279,54 @@ document.getElementById("back").onclick = () => {
 };
 
 loadSurahs();
-
-function increaseTasbih() {
-  document.getElementById("count").textContent =
-    Number(document.getElementById("count").textContent) + 1;
+function countZikr(id) {
+  const counter = document.getElementById(id);
+  counter.textContent = Number(counter.textContent) + 1;
 }
 
-function resetTasbih() {
-  document.getElementById("count").textContent = 0;
+function resetZikr(id) {
+  document.getElementById(id).textContent = 0;
 }
+
 </script>
 <div id="tasbih" style="text-align:center; padding:20px;">
-  <h2>📿 تەسبیحات</h2>
-  <h1 id="count">0</h1>
-  <button onclick="increaseTasbih()">زیادکردن</button>
-  <button onclick="resetTasbih()">سفرکردنەوە</button>
+  <h2>📿 تەسبیحات و زیکرەکان</h2>
+
+  <div class="zikr">
+    <h3>سُبْحَانَ اللَّهِ</h3>
+    <h1 id="count1">0</h1>
+    <button onclick="countZikr('count1')">زیادکردن</button>
+    <button onclick="resetZikr('count1')">سفرکردنەوە</button>
+  </div>
+
+  <div class="zikr">
+    <h3>الْحَمْدُ لِلَّهِ</h3>
+    <h1 id="count2">0</h1>
+    <button onclick="countZikr('count2')">زیادکردن</button>
+    <button onclick="resetZikr('count2')">سفرکردنەوە</button>
+  </div>
+
+  <div class="zikr">
+    <h3>اللَّهُ أَكْبَرُ</h3>
+    <h1 id="count3">0</h1>
+    <button onclick="countZikr('count3')">زیادکردن</button>
+    <button onclick="resetZikr('count3')">سفرکردنەوە</button>
+  </div>
+
+  <div class="zikr">
+    <h3>أَسْتَغْفِرُ اللَّهَ</h3>
+    <h1 id="count4">0</h1>
+    <button onclick="countZikr('count4')">زیادکردن</button>
+    <button onclick="resetZikr('count4')">سفرکردنەوە</button>
+  </div>
+
+  <div class="zikr">
+    <h3>لَا إِلَٰهَ إِلَّا اللَّهُ</h3>
+    <h1 id="count5">0</h1>
+    <button onclick="countZikr('count5')">زیادکردن</button>
+    <button onclick="resetZikr('count5')">سفرکردنەوە</button>
+  </div>
 </div>
 </body>
 </html>
-test
+
