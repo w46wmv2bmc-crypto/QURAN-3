@@ -7,180 +7,159 @@
 <title>قورئانی پیرۆز</title>
 
 <style>
+  
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: sans-serif;
-  background: #f2f5f0;
-  color: #183d31;
+  padding: 0;
+  direction: rtl;
+  font-family: Tahoma, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, #17634b 0%, transparent 45%),
+    linear-gradient(135deg, #031b16, #062b20, #02130f);
+  color: #fff4d2;
+  min-height: 100vh;
 }
 
 header {
-  background: linear-gradient(145deg,#063d32,#087b5a);
-  color: white;
+  position: relative;
+  overflow: hidden;
   text-align: center;
-  padding: 35px 15px 45px;
-  border-radius: 0 0 30px 30px;
+  padding: 35px 15px;
+  background: linear-gradient(135deg, #063b2d, #021b15);
+  border-bottom: 2px solid #c9a64b;
+  box-shadow: 0 5px 25px #0008;
 }
 
-header .moon {
-  font-size: 42px;
+header::before {
+  content: "✦       ☪       ✦";
+  display: block;
+  color: #d9b75e;
+  font-size: 25px;
+  margin-bottom: 12px;
 }
 
-header h1 {
-  margin: 12px 0;
-  font-size: 27px;
-}
-
+header h1,
+header h2,
 header p {
-  color: #e4f2e9;
-  line-height: 2;
-}
-
-main {
-  max-width: 650px;
-  margin: auto;
-  padding: 18px;
+  color: #f5d98b;
+  text-shadow: 0 2px 8px #000;
 }
 
 .home-card {
-  background: white;
+  margin: 20px auto;
+  padding: 25px 15px;
+  max-width: 500px;
+  text-align: center;
+  background: linear-gradient(145deg, #104b38, #05271e);
+  border: 1px solid #c9a64b;
   border-radius: 22px;
-  margin: 18px 0;
-  padding: 24px 18px;
-  box-shadow: 0 5px 20px #163b3012;
-  border: 1px solid #e5eee7;
+  box-shadow: 0 8px 25px #0008;
 }
 
-.home-card .symbol {
-  font-size: 43px;
+.symbol {
+  font-size: 48px;
+  margin: 10px;
 }
 
-.home-card h2 {
-  color: #075b43;
-}
-
-.home-card p {
-  color: #708077;
-  line-height: 2;
-}
-
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 13px;
-  padding: 13px 20px;
+button,
+.open-btn,
+.back {
+  background: linear-gradient(135deg, #e8cb78, #b88b35);
+  color: #10251b;
+  border: 1px solid #f5df9a;
+  border-radius: 12px;
+  padding: 12px 20px;
   font-size: 16px;
-  background: #08784e;
-  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #0006;
 }
 
-.open-btn {
-  width: 100%;
-  background: linear-gradient(120deg,#08784e,#07513d);
-}
-
-.gold {
-  color: #b58a35;
+button:hover,
+.open-btn:hover,
+.back:hover {
+  background: #f7e3a3;
 }
 
 #search {
-  width: 100%;
-  padding: 15px;
-  border: 1px solid #d5e2d8;
-  border-radius: 13px;
+  width: 90%;
+  max-width: 500px;
+  display: block;
+  margin: 15px auto;
+  padding: 13px;
+  border: 1px solid #c9a64b;
+  border-radius: 12px;
+  background: #0b382b;
+  color: white;
   font-size: 16px;
-  margin: 15px 0;
 }
 
-.surah {
-  display: block;
-  width: 100%;
-  text-align: right;
-  margin: 8px 0;
-  padding: 15px;
-  background: white;
-  color: #174b32;
-  border: 1px solid #dce9df;
+#search::placeholder {
+  color: #d7c99f;
+}
+
+.surah,
+.ayah,
+.zikr {
+  margin: 15px auto;
+  padding: 18px;
+  max-width: 650px;
+  background: linear-gradient(145deg, #104332, #06251c);
+  border: 1px solid #b99a4c;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px #0006;
 }
 
 .ayah {
-  background: white;
-  padding: 18px;
-  margin: 13px 0;
-  border-radius: 15px;
   line-height: 2.2;
-  font-size: 24px;
   text-align: center;
 }
 
-.ayah p:not(.translation) {
-  display: inline-block;
-  color: white;
-  background: #08784e;
-  padding: 8px 20px;
-  border-radius: 25px;
-  font-size: 16px;
+.ayah div {
+  color: #fff2cf;
+  font-size: 25px;
+  line-height: 2.3;
 }
 
 .translation {
-  color: #286b45;
-  font-size: 18px;
-  line-height: 2;
-  text-align: right;
-  padding: 10px;
-  background: #f0f8f1;
-  border-radius: 10px;
-}
-
-.ayah button {
-  margin: 8px;
-}
-
-.back {
-  margin: 12px 0;
-  background: #b58a35;
+  color: #e8d59e;
+  font-size: 17px;
+  border-top: 1px solid #806d3d;
+  padding-top: 12px;
 }
 
 .zikr {
-  background: white;
-  border-radius: 18px;
-  padding: 20px;
-  margin: 16px 0;
   text-align: center;
-  box-shadow: 0 4px 15px #0000000a;
 }
 
 .zikr h3 {
-  color: #075b43;
-  font-size: 23px;
+  color: #f2d78e;
 }
 
 .zikr h1 {
-  font-size: 35px;
-  color: #b58a35;
+  color: #fff0bd;
+  font-size: 38px;
 }
 
-.zikr button {
-  margin: 5px;
-}
-
-.reset {
-  background: #a65b48;
-}
-
-.hidden {
-  display: none !important;
+.back {
+  display: block;
+  margin: 15px auto;
 }
 
 footer {
   text-align: center;
-  padding: 25px;
-  color: #718078;
-  line-height: 2;
+  padding: 25px 10px;
+  color: #e5c66f;
+  border-top: 1px solid #9e803d;
+  margin-top: 30px;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 </style>
