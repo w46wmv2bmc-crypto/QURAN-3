@@ -5,16 +5,128 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>قورئانی پیرۆز</title>
-<style>.ayah p:not(.translation) {
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f2f5f0;
+  color: #183d31;
+}
+
+header {
+  background: linear-gradient(145deg,#063d32,#087b5a);
+  color: white;
+  text-align: center;
+  padding: 35px 15px 45px;
+  border-radius: 0 0 30px 30px;
+}
+
+header .moon {
+  font-size: 42px;
+}
+
+header h1 {
+  margin: 12px 0;
+  font-size: 27px;
+}
+
+header p {
+  color: #e4f2e9;
+  line-height: 2;
+}
+
+main {
+  max-width: 650px;
+  margin: auto;
+  padding: 18px;
+}
+
+.home-card {
+  background: white;
+  border-radius: 22px;
+  margin: 18px 0;
+  padding: 24px 18px;
+  box-shadow: 0 5px 20px #163b3012;
+  border: 1px solid #e5eee7;
+}
+
+.home-card .symbol {
+  font-size: 43px;
+}
+
+.home-card h2 {
+  color: #075b43;
+}
+
+.home-card p {
+  color: #708077;
+  line-height: 2;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 13px;
+  padding: 13px 20px;
+  font-size: 16px;
+  background: #08784e;
+  color: white;
+}
+
+.open-btn {
+  width: 100%;
+  background: linear-gradient(120deg,#08784e,#07513d);
+}
+
+.gold {
+  color: #b58a35;
+}
+
+#search {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #d5e2d8;
+  border-radius: 13px;
+  font-size: 16px;
+  margin: 15px 0;
+}
+
+.surah {
+  display: block;
+  width: 100%;
+  text-align: right;
+  margin: 8px 0;
+  padding: 15px;
+  background: white;
+  color: #174b32;
+  border: 1px solid #dce9df;
+}
+
+.ayah {
+  background: white;
+  padding: 18px;
+  margin: 13px 0;
+  border-radius: 15px;
+  line-height: 2.2;
+  font-size: 24px;
+  text-align: center;
+}
+
+.ayah p:not(.translation) {
   display: inline-block;
   color: white;
   background: #08784e;
   padding: 8px 20px;
   border-radius: 25px;
-  font-size: 18px;
-  margin: 15px 0;
+  font-size: 16px;
 }
-  .translation {
+
+.translation {
   color: #286b45;
   font-size: 18px;
   line-height: 2;
@@ -22,110 +134,234 @@
   padding: 10px;
   background: #f0f8f1;
   border-radius: 10px;
-  margin-top: 10px;
-}
-body {
-  margin: 0;
-  background: #f2f7f2;
-  color: #173d2b;
-  font-family: sans-serif;
-}
-header {
-  background: #075b3b;
-  color: white;
-  text-align: center;
-  padding: 25px 10px;
-}
-header h1 { margin: 5px; }
-main {
-  padding: 15px;
-  max-width: 700px;
-  margin: auto;
-}
-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 14px;
-  border: 1px solid #aaa;
-  border-radius: 10px;
-  font-size: 17px;
-  margin-bottom: 15px;
-}
-button {
-  background: #087448;
-  color: white;
-  border: 0;
-  padding: 12px;
-  border-radius: 9px;
-  font-size: 16px;
-  cursor: pointer;
-}
-.surah {
-  display: block;
-  width: 100%;
-  margin: 7px 0;
-  text-align: right;
-  background: white;
-  color: #174b32;
-  border: 1px solid #d5e5d9;
-}
-.ayah {
-  background: white;
-  color: #173d2b;
-  padding: 18px;
-  margin: 12px 0;
-  border-radius: 12px;
-  line-height: 2.2;
-  font-size: 25px;
-  text-align: center;
-  direction: rtl;
-}
-.ayah button { font-size: 14px; }
-#message {
-  text-align: center;
-  padding: 12px;
-}
-#back { margin-bottom: 12px; }
-.ayah button {
-  background: #08784e;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 10px 22px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 10px 0;
 }
 
-.ayah button:active {
-  background: #064d35;
-  transform: scale(0.96);
+.ayah button {
+  margin: 8px;
 }
+
+.back {
+  margin: 12px 0;
+  background: #b58a35;
+}
+
+.zikr {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin: 16px 0;
+  text-align: center;
+  box-shadow: 0 4px 15px #0000000a;
+}
+
+.zikr h3 {
+  color: #075b43;
+  font-size: 23px;
+}
+
+.zikr h1 {
+  font-size: 35px;
+  color: #b58a35;
+}
+
+.zikr button {
+  margin: 5px;
+}
+
+.reset {
+  background: #a65b48;
+}
+
+.hidden {
+  display: none !important;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #718078;
+  line-height: 2;
+}
+
 </style>
 </head>
-<body><footer>
-  دروستکراوە لەلایەن
-  <strong>Ahmad Suleman Masih</strong>
-</footer>
+
+<body>
 
 <header>
-  <h1>📖 قورئانی پیرۆز</h1>
-  <p>بە ناوی خوای بەخشندە و میهرەبان</p>
+  <div class="moon">🌙</div>
+  <h1>قورئانی پیرۆز</h1>
+  <p>
+    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+    <br>
+    بە ناوی خوای بەخشندە و میهرەبان
+  </p>
+  <div class="gold">✦ ✦ ✦</div>
 </header>
 
 <main>
-  <input id="search" placeholder="گەڕان بە ناوی سوورەت..." />
+
+<!-- پەڕەی سەرەکی -->
+
+<section id="home">
+
+  <div class="home-card">
+    <div class="symbol">📖</div>
+    <h2>قورئانی پیرۆز</h2>
+    <p>
+      خوێندنەوەی قورئانی پیرۆز،
+      وەرگێڕانی کوردی و گوێگرتن.
+    </p>
+    <button class="open-btn" onclick="showQuran()">
+      کردنەوەی قورئان
+    </button>
+  </div>
+
+  <div class="home-card">
+    <div class="symbol">📿</div>
+    <h2>تەسبیحات و زیکرەکان</h2>
+    <p>
+      زیکر و تەسبیحاتەکانت بە ژمێرەری تایبەت.
+    </p>
+    <button class="open-btn" onclick="showTasbih()">
+      کردنەوەی تەسبیحات
+    </button>
+  </div>
+
+  <div class="home-card" style="text-align:center">
+    <div class="symbol">🤲</div>
+    <h2>یادی خوای گەورە</h2>
+    <p>بە یادی خوا دڵەکان ئارام دەگرن.</p>
+  </div>
+
+</section>
+
+<!-- بەشی قورئان -->
+
+<section id="quran" class="hidden">
+
+  <button class="back" onclick="showHome()">
+    ⬅ پەڕەی سەرەکی
+  </button>
+
+  <h2>📖 سوورەتەکانی قورئان</h2>
+
+  <input id="search"
+  placeholder="گەڕان بە ناوی سوورەت..." />
+
   <div id="message">تکایە چاوەڕێ بکە...</div>
   <div id="list"></div>
 
-  <section id="reader" hidden>
-    <button id="back">⬅ گەڕانەوە بۆ سوورەتەکان</button>
+  <section id="reader" class="hidden">
+    <button class="back" id="back">
+      ⬅ گەڕانەوە بۆ سوورەتەکان
+    </button>
     <h2 id="surahTitle"></h2>
     <div id="verses"></div>
   </section>
+
+</section>
+
+<!-- بەشی تەسبیحات -->
+
+<section id="tasbih" class="hidden">
+
+  <button class="back" onclick="showHome()">
+    ⬅ پەڕەی سەرەکی
+  </button>
+
+  <h2 style="text-align:center">
+    📿 تەسبیحات و زیکرەکان
+  </h2>
+
+  <div class="zikr">
+    <h3>سُبْحَانَ اللَّهِ</h3>
+    <h1 id="count1">0</h1>
+    <button onclick="countZikr('count1')">زیادکردن</button>
+    <button class="reset" onclick="resetZikr('count1')">سفرکردنەوە</button>
+  </div>
+
+  <div class="zikr">
+    <h3>الْحَمْدُ لِلَّهِ</h3>
+    <h1 id="count2">0</h1>
+    <button onclick="countZikr('count2')">زیادکردن</button>
+    <button class="reset" onclick="resetZikr('count2')">سفرکردنەوە</button>
+  </div>
+
+  <div class="zikr">
+    <h3>اللَّهُ أَكْبَرُ</h3>
+    <h1 id="count3">0</h1>
+    <button onclick="countZikr('count3')">زیادکردن</button>
+    <button class="reset" onclick="resetZikr('count3')">سفرکردنەوە</button>
+  </div>
+
+  <div class="zikr">
+    <h3>أَسْتَغْفِرُ اللَّهَ</h3>
+    <h1 id="count4">0</h1>
+    <button onclick="countZikr('count4')">زیادکردن</button>
+    <button class="reset" onclick="resetZikr('count4')">سفرکردنەوە</button>
+  </div>
+
+  <div class="zikr">
+    <h3>لَا إِلَٰهَ إِلَّا اللَّهُ</h3>
+    <h1 id="count5">0</h1>
+    <button onclick="countZikr('count5')">زیادکردن</button>
+    <button class="reset" onclick="resetZikr('count5')">سفرکردنەوە</button>
+  </div>
+
+</section>
+
 </main>
 
+<footer>
+  دروستکراوە لەلایەن
+  <strong>Ahmad Suleman Masih</strong>
+  <br>
+  🌙 قورئانی پیرۆز
+</footer>
+
 <script>
+
+const home = document.getElementById("home");
+const quran = document.getElementById("quran");
+const tasbih = document.getElementById("tasbih");
+
+function hideAll() {
+  home.classList.add("hidden");
+  quran.classList.add("hidden");
+  tasbih.classList.add("hidden");
+}
+
+function showHome() {
+  audio.pause();
+  hideAll();
+  home.classList.remove("hidden");
+}
+
+function showQuran() {
+  hideAll();
+  quran.classList.remove("hidden");
+}
+
+function showTasbih() {
+  hideAll();
+  tasbih.classList.remove("hidden");
+}
+
+// ژمێرەری تەسبیحات
+
+function countZikr(id) {
+  const counter = document.getElementById(id);
+  counter.textContent =
+    Number(counter.textContent) + 1;
+}
+
+function resetZikr(id) {
+  document.getElementById(id).textContent = 0;
+}
+
+// قورئان
+
 const list = document.getElementById("list");
 const message = document.getElementById("message");
 const search = document.getElementById("search");
@@ -140,6 +376,7 @@ async function loadSurahs() {
     const response = await fetch(
       "https://api.alquran.cloud/v1/surah"
     );
+
     const data = await response.json();
 
     if (data.code !== 200) throw new Error();
@@ -147,9 +384,10 @@ async function loadSurahs() {
     surahs = data.data;
     message.textContent = "سوورەتێک هەڵبژێرە";
     showSurahs(surahs);
+
   } catch (error) {
     message.textContent =
-      "هەڵە لە پەیوەندی ئینتەرنێت. تکایە دووبارە هەوڵ بدە.";
+      "هەڵە لە ئینتەرنێت. دووبارە هەوڵ بدە.";
   }
 }
 
@@ -159,9 +397,11 @@ function showSurahs(items) {
   items.forEach(surah => {
     const button = document.createElement("button");
     button.className = "surah";
+
     button.textContent =
-      surah.number + " - " + surah.name +
-      " (" + surah.englishName + ")";
+      surah.number + " - " +
+      surah.name + " (" +
+      surah.englishName + ")";
 
     button.onclick = () => openSurah(surah);
     list.appendChild(button);
@@ -179,9 +419,10 @@ search.addEventListener("input", () => {
 });
 
 async function openSurah(surah) {
-  list.hidden = true;
-  search.hidden = true;
-  reader.hidden = false;
+
+  list.classList.add("hidden");
+  search.classList.add("hidden");
+  reader.classList.remove("hidden");
 
   document.getElementById("surahTitle").textContent =
     surah.name + " - " + surah.englishName;
@@ -189,52 +430,61 @@ async function openSurah(surah) {
   verses.innerHTML = "تکایە چاوەڕێ بکە...";
 
   try {
-    // سەرەتا تەنها دەقی قورئان بار دەکەین
+
     const textResponse = await fetch(
-      "https://api.alquran.cloud/v1/surah/" + surah.number
+      "https://api.alquran.cloud/v1/surah/" +
+      surah.number
     );
 
     const textData = await textResponse.json();
-const translationResponse = await fetch(
-  "https://quranenc.com/api/v1/translation/sura/kurdish_bamoki/" + surah.number
-);
-const translationData = await translationResponse.json();
-    console.log(translationData);
+
+    const translationResponse = await fetch(
+      "https://quranenc.com/api/v1/translation/sura/kurdish_bamoki/" +
+      surah.number
+    );
+
+    const translationData =
+      await translationResponse.json();
+
     if (textData.code !== 200) throw new Error();
 
     verses.innerHTML = "";
 
-    // دەقی ئایەتەکان نیشان دەدەین
-textData.data.ayahs.forEach((ayah, index) => {
+    textData.data.ayahs.forEach((ayah, index) => {
+
       const box = document.createElement("div");
       box.className = "ayah";
 
       const text = document.createElement("div");
-text.textContent = ayah.text + " ۞ ";
+      text.textContent = ayah.text + " ۞ ";
 
-const translation = document.createElement("p");
-translation.textContent =
-  translationData.result[index]?.translation || "وەرگێڕان بەردەست نییە";
-translation.className = "translation";
+      const translation = document.createElement("p");
+
+      translation.textContent =
+        translationData.result?.[index]?.translation ||
+        "وەرگێڕان بەردەست نییە";
+
+      translation.className = "translation";
 
       const number = document.createElement("p");
-      number.textContent = "ئایەتی " + ayah.numberInSurah;
+      number.textContent =
+        "ئایەتی " + ayah.numberInSurah;
 
       const play = document.createElement("button");
       play.textContent = "▶ چاوەڕێی دەنگ...";
 
       box.appendChild(text);
       box.appendChild(translation);
-
       box.appendChild(number);
       box.appendChild(play);
-      verses.appendChild(box);
 
+      verses.appendChild(box);
       play.disabled = true;
+
     });
 
-    // دوای نیشاندانی دەق، دەنگ بە جیا بار دەکەین
     try {
+
       const audioResponse = await fetch(
         "https://api.alquran.cloud/v1/surah/" +
         surah.number + "/ar.alafasy"
@@ -243,10 +493,13 @@ translation.className = "translation";
       const audioData = await audioResponse.json();
 
       if (audioData.code === 200) {
+
         const boxes = verses.querySelectorAll(".ayah");
 
         audioData.data.ayahs.forEach((ayah, index) => {
-          const play = boxes[index]?.querySelector("button");
+
+          const play =
+            boxes[index]?.querySelector("button");
 
           if (!play || !ayah.audio) return;
 
@@ -254,12 +507,14 @@ translation.className = "translation";
           play.textContent = "▶ گوێگرتن";
 
           play.onclick = () => {
-  audio.src = ayah.audio;
-  audio.play();
-};
-});
-}
-} catch (audioError) {
+            audio.src = ayah.audio;
+            audio.play();
+          };
+
+        });
+      }
+
+    } catch (audioError) {
       verses.querySelectorAll(".ayah button").forEach(button => {
         button.textContent = "دەنگ بەردەست نییە";
       });
@@ -267,66 +522,20 @@ translation.className = "translation";
 
   } catch (error) {
     verses.textContent =
-      "نەتوانرا دەقی سوورەتەکە باربکرێت. ئینتەرنێتەکەت بپشکنە.";
+      "نەتوانرا سوورەتەکە باربکرێت. ئینتەرنێتەکەت بپشکنە.";
   }
 }
 
 document.getElementById("back").onclick = () => {
   audio.pause();
-  reader.hidden = true;
-  list.hidden = false;
-  search.hidden = false;
+  reader.classList.add("hidden");
+  list.classList.remove("hidden");
+  search.classList.remove("hidden");
 };
 
 loadSurahs();
-function countZikr(id) {
-  const counter = document.getElementById(id);
-  counter.textContent = Number(counter.textContent) + 1;
-}
-
-function resetZikr(id) {
-  document.getElementById(id).textContent = 0;
-}
 
 </script>
-<div id="tasbih" style="text-align:center; padding:20px;">
-  <h2>📿 تەسبیحات و زیکرەکان</h2>
 
-  <div class="zikr">
-    <h3>سُبْحَانَ اللَّهِ</h3>
-    <h1 id="count1">0</h1>
-    <button onclick="countZikr('count1')">زیادکردن</button>
-    <button onclick="resetZikr('count1')">سفرکردنەوە</button>
-  </div>
-
-  <div class="zikr">
-    <h3>الْحَمْدُ لِلَّهِ</h3>
-    <h1 id="count2">0</h1>
-    <button onclick="countZikr('count2')">زیادکردن</button>
-    <button onclick="resetZikr('count2')">سفرکردنەوە</button>
-  </div>
-
-  <div class="zikr">
-    <h3>اللَّهُ أَكْبَرُ</h3>
-    <h1 id="count3">0</h1>
-    <button onclick="countZikr('count3')">زیادکردن</button>
-    <button onclick="resetZikr('count3')">سفرکردنەوە</button>
-  </div>
-
-  <div class="zikr">
-    <h3>أَسْتَغْفِرُ اللَّهَ</h3>
-    <h1 id="count4">0</h1>
-    <button onclick="countZikr('count4')">زیادکردن</button>
-    <button onclick="resetZikr('count4')">سفرکردنەوە</button>
-  </div>
-
-  <div class="zikr">
-    <h3>لَا إِلَٰهَ إِلَّا اللَّهُ</h3>
-    <h1 id="count5">0</h1>
-    <button onclick="countZikr('count5')">زیادکردن</button>
-    <button onclick="resetZikr('count5')">سفرکردنەوە</button>
-  </div>
-</div>
 </body>
 </html>
-
