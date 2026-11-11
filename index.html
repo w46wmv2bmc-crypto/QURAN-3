@@ -79,6 +79,7 @@ footer{
  padding:12px;border-bottom:1px solid #806d3d;
  font-size:18px
 }
+.adhan-play{display:block;width:90%;max-width:350px;margin:10px auto}
 </style>
 </head>
 <body>
@@ -169,19 +170,28 @@ footer{
  <button class="back" onclick="showPage('home')">⬅ پەڕەی سەرەکی</button>
  <h2 class="page-title">🕌 بانگی پێنج نوێژ</h2>
  <p style="text-align:center;color:#e8d59e">کاتەکانی نوێژ لە هەولێر</p>
+
  <div class="home-card">
   <p id="prayerDate">چاوەڕێ بکە...</p>
   <div id="prayerTimes">کاتەکانی نوێژ بار دەکرێن...</div>
   <button onclick="loadPrayerTimes()">🔄 نوێکردنەوەی کاتەکان</button>
  </div>
+
  <div class="home-card">
-  <h3>🕌 گوێگرتن لە بانگ</h3>
-  <p>بانگی نوێژەکان</p>
-  <button onclick="playAdhan()">▶ پەخشکردنی بانگ</button>
-  <button onclick="stopArabicVoice()">⏸ وەستان</button>
+  <h3>🕌 گوێگرتن لە بانگی پێنج نوێژ</h3>
+  <p>بانگی تۆمارکراوی هەر نوێژێک هەڵبژێرە</p>
+
+  <button class="adhan-play" onclick="playAdhan('Fajr',this)">🌅 بانگی بەیانی</button>
+  <button class="adhan-play" onclick="playAdhan('Dhuhr',this)">☀️ بانگی نیوەڕۆ</button>
+  <button class="adhan-play" onclick="playAdhan('Asr',this)">🌤 بانگی عەسر</button>
+  <button class="adhan-play" onclick="playAdhan('Maghrib',this)">🌇 بانگی مەغریب</button>
+  <button class="adhan-play" onclick="playAdhan('Isha',this)">🌙 بانگی عیشا</button>
+
+  <button onclick="stopAdhan()">⏹ وەستاندنی بانگ</button>
  </div>
+
  <p style="text-align:center;color:#e8d59e;font-size:13px">
-  تێبینی: دەنگی بانگ بە دەنگی عەرەبیی سیستەمی ئامێرەکەتە.
+  دەنگی بانگەکان فایلە تۆمارکراوەکانی MP3 ـن.
  </p>
 </section>
 
@@ -225,20 +235,27 @@ footer{
 const pageIds=["home","quran","tasbih","morning","evening","adhan","settings"];
 
 let audio=new Audio();
+let adhanAudio=new Audio();
 let surahs=[];
 let currentSpeech=null;
 let currentSpeechButton=null;
+let currentAdhanButton=null;
+
+adhanAudio.preload="none";
 
 function showPage(id){
  audio.pause();
+ stopAdhan();
  stopArabicVoice();
+
  pageIds.forEach(page=>{
   document.getElementById(page).classList.add("hidden");
  });
+
  document.getElementById(id).classList.remove("hidden");
 }
 
-// دەنگی عەرەبی بۆ زیکر و بانگ
+// دەنگی عەرەبی بۆ زیکرەکان
 function speakArabic(words,button){
  if(!("speechSynthesis" in window)){
   alert("دەنگ لە ئامێرەکەتدا بەردەست نییە");
@@ -253,12 +270,21 @@ function speakArabic(words,button){
 
  if(button && currentSpeechButton===button){
   currentSpeechButton=null;
+  currentSpeech=null;
   return;
  }
 
  const speech=new SpeechSynthesisUtterance(words);
- speech.lang="ar";
+ speech.lang="ar-SA";
  speech.rate=0.85;
+
+ const voices=window.speechSynthesis.getVoices();
+ const arabicVoice=voices.find(v=>v.lang.toLowerCase().startsWith("ar"));
+
+ if(arabicVoice){
+  speech.voice=arabicVoice;
+ }
+
  currentSpeech=speech;
  currentSpeechButton=button;
 
@@ -280,8 +306,14 @@ function speakArabic(words,button){
 }
 
 function stopArabicVoice(){
- if("speechSynthesis" in window) window.speechSynthesis.cancel();
- if(currentSpeechButton) currentSpeechButton.textContent="▶ گوێگرتن";
+ if("speechSynthesis" in window){
+  window.speechSynthesis.cancel();
+ }
+
+ if(currentSpeechButton){
+  currentSpeechButton.textContent="▶ گوێگرتن";
+ }
+
  currentSpeechButton=null;
  currentSpeech=null;
 }
@@ -300,7 +332,7 @@ adhkarSetting.addEventListener("change",()=>{
 
 adhanSetting.addEventListener("change",()=>{
  localStorage.setItem("adhanSound",adhanSetting.checked);
- if(!adhanSetting.checked) stopArabicVoice();
+ if(!adhanSetting.checked) stopAdhan();
 });
 
 // ژمێرەری تەسبیحات
@@ -324,21 +356,27 @@ const tasbihItems=[
 function renderTasbih(){
  const area=document.getElementById("tasbihList");
  area.innerHTML="";
+
  tasbihItems.forEach((item,i)=>{
   const id="count"+(i+1);
   const box=document.createElement("div");
   box.className="zikr";
+
   const heading=document.createElement("h3");
   heading.textContent=item;
+
   const count=document.createElement("h1");
   count.id=id;
   count.textContent="0";
+
   const add=document.createElement("button");
   add.textContent="زیادکردن";
   add.onclick=()=>countZikr(id);
+
   const reset=document.createElement("button");
   reset.textContent="سفرکردنەوە";
   reset.onclick=()=>resetZikr(id);
+
   box.append(heading,count,add,reset);
   area.appendChild(box);
  });
@@ -480,17 +518,66 @@ renderTasbih();
 renderAdhkar(morningItems,"morningList","morningCount");
 renderAdhkar(eveningItems,"eveningList","eveningCount");
 
-// بانگی نوێژ
-const adhanText=
-"اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ، أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ، أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، حَيَّ عَلَى الصَّلَاةِ، حَيَّ عَلَى الصَّلَاةِ، حَيَّ عَلَى الْفَلَاحِ، حَيَّ عَلَى الْفَلَاحِ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، لَا إِلَٰهَ إِلَّا اللَّهُ";
+// دەنگی تۆمارکراوی بانگی پێنج نوێژ
+const adhanAudioFiles={
+ Fajr:"https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_01_Fajr_Adhan.mp3",
+ Dhuhr:"https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_02_Dhuhr_Adhan.mp3",
+ Asr:"https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_03_Asr_Adhan.mp3",
+ Maghrib:"https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_04_Maghrib_Adhan.mp3",
+ Isha:"https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_05_Isha_Adhan.mp3"
+};
 
-function playAdhan(){
+function playAdhan(prayer,button){
  if(!adhanSetting.checked){
   alert("دەنگی بانگ لە Settings ناچالاک کراوە");
   return;
  }
- speakArabic(adhanText,null);
+
+ stopArabicVoice();
+ audio.pause();
+ stopAdhan();
+
+ adhanAudio.src=adhanAudioFiles[prayer];
+ currentAdhanButton=button;
+ button.textContent="⏳ چاوەڕێ بکە...";
+
+ adhanAudio.currentTime=0;
+
+ adhanAudio.play().then(()=>{
+  if(currentAdhanButton===button){
+   button.textContent="⏸ بانگ دەخوێندرێتەوە";
+  }
+ }).catch(()=>{
+  button.textContent="دووبارە هەوڵ بدە";
+  currentAdhanButton=null;
+  alert("نەتوانرا دەنگی بانگ پەخش بکرێت. ئینتەرنێتەکەت بپشکنە.");
+ });
 }
+
+function stopAdhan(){
+ adhanAudio.pause();
+ adhanAudio.currentTime=0;
+
+ document.querySelectorAll(".adhan-play").forEach(button=>{
+  button.textContent="▶ گوێگرتن";
+ });
+
+ currentAdhanButton=null;
+}
+
+adhanAudio.onended=()=>{
+ document.querySelectorAll(".adhan-play").forEach(button=>{
+  button.textContent="▶ گوێگرتن";
+ });
+ currentAdhanButton=null;
+};
+
+adhanAudio.onerror=()=>{
+ if(currentAdhanButton){
+  currentAdhanButton.textContent="▶ گوێگرتن";
+ }
+ currentAdhanButton=null;
+};
 
 // کاتەکانی نوێژ لە هەولێر
 async function loadPrayerTimes(){
@@ -520,10 +607,13 @@ async function loadPrayerTimes(){
   prayers.forEach(([name,key])=>{
    const row=document.createElement("div");
    row.className="prayer-row";
+
    const title=document.createElement("span");
    title.textContent=name;
+
    const time=document.createElement("strong");
    time.textContent=times[key];
+
    row.append(title,time);
    area.appendChild(row);
   });
@@ -545,9 +635,11 @@ async function loadSurahs(){
   const response=await fetch("https://api.alquran.cloud/v1/surah");
   const data=await response.json();
   if(data.code!==200) throw new Error();
+
   surahs=data.data;
   message.textContent="سوورەتێک هەڵبژێرە";
   showSurahs(surahs);
+
  }catch(error){
   message.textContent="هەڵە لە ئینتەرنێت. دووبارە هەوڵ بدە.";
  }
@@ -555,6 +647,7 @@ async function loadSurahs(){
 
 function showSurahs(items){
  list.innerHTML="";
+
  items.forEach(surah=>{
   const button=document.createElement("button");
   button.className="surah";
@@ -566,6 +659,7 @@ function showSurahs(items){
 
 search.addEventListener("input",()=>{
  const word=search.value.trim().toLowerCase();
+
  showSurahs(surahs.filter(s=>
   s.name.includes(word)||
   s.englishName.toLowerCase().includes(word)||
@@ -575,12 +669,15 @@ search.addEventListener("input",()=>{
 
 async function openSurah(surah){
  stopArabicVoice();
+ stopAdhan();
+
  list.classList.add("hidden");
  search.classList.add("hidden");
  reader.classList.remove("hidden");
 
  document.getElementById("surahTitle").textContent=
   surah.name+" - "+surah.englishName;
+
  verses.textContent="تکایە چاوەڕێ بکە...";
 
  try{
@@ -597,6 +694,7 @@ async function openSurah(surah){
   if(textData.code!==200) throw new Error();
 
   verses.innerHTML="";
+
   textData.data.ayahs.forEach((ayah,index)=>{
    const box=document.createElement("div");
    box.className="ayah";
@@ -629,6 +727,7 @@ async function openSurah(surah){
 
    if(audioData.code===200){
     const boxes=verses.querySelectorAll(".ayah");
+
     audioData.data.ayahs.forEach((ayah,index)=>{
      const play=boxes[index]?.querySelector("button");
      if(!play||!ayah.audio)return;
@@ -638,12 +737,15 @@ async function openSurah(surah){
 
      play.onclick=async()=>{
       stopArabicVoice();
+      stopAdhan();
+
       if(audio.src===ayah.audio&&!audio.paused){
        audio.pause();
        play.textContent="▶ بەردەوامبوون";
       }else{
        audio.pause();
        audio.src=ayah.audio;
+
        try{
         await audio.play();
         play.textContent="⏸ وەستان";
@@ -654,6 +756,7 @@ async function openSurah(surah){
      };
     });
    }
+
   }catch(e){
    verses.querySelectorAll(".ayah button").forEach(b=>{
     b.textContent="دەنگ بەردەست نییە";
@@ -667,8 +770,9 @@ async function openSurah(surah){
 
 audio.onended=()=>{
  document.querySelectorAll(".ayah button").forEach(button=>{
-  if(button.textContent==="⏸ وەستان")
+  if(button.textContent==="⏸ وەستان"){
    button.textContent="▶ گوێگرتن";
+  }
  });
 };
 
