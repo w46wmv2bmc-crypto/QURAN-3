@@ -670,6 +670,7 @@ if (searchInput) {
   });
 }
 
+const quranAudio = new Audio();
 async function openSurah(surah) {
   currentSurah = surah;
 
@@ -685,23 +686,34 @@ async function openSurah(surah) {
   if (verses) verses.innerHTML = "تکایە چاوەڕێ بکە...";
 
   try {
-    const [arabicResponse, translationResponse] = await Promise.all([
-      fetch("https://api.alquran.cloud/v1/surah/" + surah.number),
-      fetch(
-        "https://quranenc.com/api/v1/translation/sura/bamoki/" +
-        surah.number
-      )
-    ]);
+    const arabicResponse = await fetch(
+      "https://api.alquran.cloud/v1/surah/" + surah.number
+    );
+
+    if (!arabicResponse.ok) throw new Error("Quran error");
 
     const arabicData = await arabicResponse.json();
-    const translationData = await translationResponse.json();
-
     const arabicAyahs = arabicData.data.ayahs;
-    const translations = translationData.result || [];
+
+    let translations = [];
+
+    try {
+      const translationResponse = await fetch(
+        "https://quranenc.com/api/v1/translation/sura/bamoki/" +
+        surah.number
+      );
+
+      if (translationResponse.ok) {
+        const translationData = await translationResponse.json();
+        translations = translationData.result || [];
+      }
+    } catch (error) {
+      console.log("Translation unavailable");
+    }
 
     verses.innerHTML = "";
 
-    arabicAyahs.forEach((ayah, index) => {
+    arabicAyahs.forEach((ayah) => {
       const translation = translations.find(item =>
         Number(item.aya) === ayah.numberInSurah
       );
@@ -719,8 +731,9 @@ async function openSurah(surah) {
       number.textContent = "﴿ " + ayah.numberInSurah + " ﴾";
 
       const kurdish = document.createElement("p");
-      kurdish.textContent =
-        translation ? translation.translation : "وەرگێڕان بەردەست نییە";
+      kurdish.textContent = translation
+        ? translation.translation
+        : "وەرگێڕانی کوردی بەردەست نییە";
 
       card.append(arabic, number, kurdish);
       verses.appendChild(card);
@@ -728,7 +741,6 @@ async function openSurah(surah) {
 
     const audioButton = document.createElement("button");
     audioButton.textContent = "▶️ دەنگی خوێندنەوە";
-
     audioButton.onclick = () => playSurahAudio(surah, audioButton);
 
     verses.prepend(audioButton);
@@ -742,6 +754,7 @@ async function openSurah(surah) {
 let quranAudioAyahs = [];
 let quranAudioIndex = 0;
 let quranAudioButton = null;
+
 
 async function playSurahAudio(surah, button) {
   quranAudio.pause();
