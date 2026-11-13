@@ -705,7 +705,9 @@ async function openSurah(surah) {
 
       if (translationResponse.ok) {
         const translationData = await translationResponse.json();
-        translations = translationData.result || [];
+      translations = Array.isArray(translationData)
+  ? translationData
+  : (translationData.result || []);
       }
     } catch (error) {
       console.log("Translation unavailable");
