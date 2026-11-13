@@ -505,6 +505,8 @@ function speakArabic(text, button) {
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "ar";
+ const voices = window.speechSynthesis.getVoices();
+console.log(voices.map(v => v.lang + " - " + v.name));
   utterance.rate = 0.8;
   utterance.volume = 1;
   utterance.pitch = 1;
