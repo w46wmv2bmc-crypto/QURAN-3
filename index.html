@@ -288,7 +288,9 @@ let currentAdhkarButton = null;
 let currentAdhanButton = null;
 let prayerData = null;
 let qiblaBearing = null;
-
+window.onerror = function(message, source, line) {
+  alert("هەڵەی کۆد: " + message + " | دێڕ: " + line);
+};
 function showPage(id) {
   pageIds.forEach(page => {
     const element = document.getElementById(page);
