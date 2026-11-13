@@ -492,6 +492,8 @@ const eveningListData = [
 
 
 
+
+
 function speakArabic(text, button) {
   if (!("speechSynthesis" in window)) {
     alert("دەنگ لەم وێبگەڕەدا پشتگیری ناکرێت");
@@ -507,8 +509,9 @@ function speakArabic(text, button) {
   synth.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "ar";
-  utterance.rate = 0.8;
+
+  utterance.lang = "ar-SA";
+  utterance.rate = 0.85;
   utterance.volume = 1;
   utterance.pitch = 1;
 
@@ -527,12 +530,10 @@ function speakArabic(text, button) {
   utterance.onerror = (event) => {
     button.textContent = "🔊 گوێگرتن";
     currentAdhkarButton = null;
-    alert("هەڵەی دەنگ: " + event.error);
+    console.log("Speech error:", event.error);
   };
 
-  setTimeout(() => {
-    synth.speak(utterance);
-  }, 300);
+  synth.speak(utterance);
 }
 
 
@@ -585,21 +586,19 @@ function renderAdhkar(items, targetId) {
       add.textContent = "📿 زیادکردن";
     };
 
-    const sound = document.createElement("button");
-    sound.textContent = "🔊 گوێگرتن";
+const sound = document.createElement("button");
+sound.textContent = "🔊 گوێگرتن";
 
-    sound.onclick = () => {
-      if (adhkarSetting && !adhkarSetting.checked) {
-        alert("تکایە دەنگ لە ڕێکخستنەکان چالاک بکە");
-        return;
-      }
-      speakArabic(item.arabic, sound);
-    };
+sound.onclick = () => {
+  speakArabic(item.arabic, sound);
+};
 
-    card.append(title, arabic, progress, add, reset, sound);
-    container.appendChild(card);
-  });
+card.append(title, arabic, progress, add, reset, sound);
+container.appendChild(card);
+});
 }
+
+    
 
 renderAdhkar(morningListData, "morningList");
 renderAdhkar(eveningListData, "eveningList");
