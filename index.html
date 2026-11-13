@@ -759,13 +759,38 @@ let quranAudioButton = null;
 
 
 async function playSurahAudio(surah, button) {
+  if (quranAudioButton === button && !quranAudio.paused) {
+    quranAudio.pause();
+    button.textContent = "▶️ بەردەوامبوون";
+    return;
+  }
+
+  if (
+    quranAudioButton === button &&
+    quranAudio.paused &&
+    quranAudioAyahs.length > 0 &&
+    quranAudio.src
+  ) {
+    quranAudio.play()
+      .then(() => {
+        button.textContent = "⏸️ وەستاندن";
+      })
+      .catch(() => {
+        button.textContent = "▶️ بەردەوامبوون";
+      });
+    return;
+  }
+
   quranAudio.pause();
+  quranAudio.onended = null;
 
   if (quranAudioButton) {
     quranAudioButton.textContent = "▶️ دەنگی خوێندنەوە";
   }
 
   quranAudioButton = button;
+  quranAudioAyahs = [];
+  quranAudioIndex = 0;
   button.textContent = "⏳ چاوەڕێ بکە...";
 
   try {
@@ -791,38 +816,45 @@ async function playSurahAudio(surah, button) {
 
     quranAudioAyahs = result.data.ayahs;
     quranAudioIndex = 0;
-
-    button.textContent = "⏸️ دەنگ لە کاردایە";
-
     quranAudio.onended = playNextQuranAyah;
 
     playNextQuranAyah();
 
   } catch (error) {
     button.textContent = "▶️ دەنگی خوێندنەوە";
+    quranAudioButton = null;
     alert("دەنگی خوێندنەوە نەدۆزرایەوە");
   }
 }
 
 function playNextQuranAyah() {
-  if (quranAudioIndex >= quranAudioAyahs.length) {
-    if (quranAudioButton) {
-      quranAudioButton.textContent = "▶️ دەنگی خوێندنەوە";
-    }
+  if (!quranAudioButton) return;
 
+  if (quranAudioIndex >= quranAudioAyahs.length) {
+    quranAudioButton.textContent = "▶️ دەنگی خوێندنەوە";
     quranAudioButton = null;
     return;
   }
 
-  quranAudio.src = quranAudioAyahs[quranAudioIndex].audio;
+  const ayah = quranAudioAyahs[quranAudioIndex];
   quranAudioIndex++;
 
-  quranAudio.play().catch(function() {
-    if (quranAudioButton) {
-      quranAudioButton.textContent = "▶️ دەنگی خوێندنەوە";
-    }
-  });
+  quranAudio.src = ayah.audio;
+
+  quranAudio.play()
+    .then(() => {
+      if (quranAudioButton) {
+        quranAudioButton.textContent = "⏸️ وەستاندن";
+      }
+    })
+    .catch(() => {
+      if (quranAudioButton) {
+        quranAudioButton.textContent = "▶️ بەردەوامبوون";
+      }
+    });
 }
+
+
 
 if (reciterSelect) {
   reciterSelect.addEventListener("change", () => {
