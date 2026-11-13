@@ -520,10 +520,7 @@ function speakArabic(text, button) {
     alert("هەڵەی دەنگ: " + event.error);
   };
 
-  setTimeout(() => {
-    window.speechSynthesis.speak(utterance);
-  }, 200);
-}
+  window.speechSynthesis.speak(utterance);
 
 function renderAdhkar(items, targetId) {
   const container = document.getElementById(targetId);
