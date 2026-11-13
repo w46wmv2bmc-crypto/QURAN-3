@@ -491,22 +491,23 @@ const eveningListData = [
 ];
 
 
+
 function speakArabic(text, button) {
   if (!("speechSynthesis" in window)) {
     alert("دەنگ لەم وێبگەڕەدا پشتگیری ناکرێت");
     return;
   }
 
- 
+  const synth = window.speechSynthesis;
 
   if (currentAdhkarButton) {
     currentAdhkarButton.textContent = "🔊 گوێگرتن";
   }
 
+  synth.cancel();
+
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "ar";
- const voices = window.speechSynthesis.getVoices();
-console.log(voices.map(v => v.lang + " - " + v.name));
   utterance.rate = 0.8;
   utterance.volume = 1;
   utterance.pitch = 1;
@@ -529,8 +530,11 @@ console.log(voices.map(v => v.lang + " - " + v.name));
     alert("هەڵەی دەنگ: " + event.error);
   };
 
-  window.speechSynthesis.speak(utterance);
+  setTimeout(() => {
+    synth.speak(utterance);
+  }, 300);
 }
+
 
 function renderAdhkar(items, targetId) {
   const container = document.getElementById(targetId);
