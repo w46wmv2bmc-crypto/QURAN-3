@@ -764,23 +764,17 @@ async function playSurahAudio(surah, button) {
     button.textContent = "▶️ بەردەوامبوون";
     return;
   }
-
-  if (
-    quranAudioButton === button &&
-    quranAudio.paused &&
-    quranAudioAyahs.length > 0 &&
-    quranAudio.src
-  ) {
-    quranAudio.play()
-      .then(() => {
-        button.textContent = "⏸️ وەستاندن";
-      })
-      .catch(() => {
-        button.textContent = "▶️ بەردەوامبوون";
-      });
-    return;
-  }
-
+if (quranAudioButton === button && quranAudio.paused && quranAudio.src) {
+  quranAudio.play()
+    .then(() => {
+      button.textContent = "⏸️ وەستاندن";
+    })
+    .catch(() => {
+      button.textContent = "▶️ بەردەوامبوون";
+    });
+  return;
+}
+  
   quranAudio.pause();
   quranAudio.onended = null;
 
@@ -839,7 +833,10 @@ function playNextQuranAyah() {
   const ayah = quranAudioAyahs[quranAudioIndex];
   quranAudioIndex++;
 
+  if (quranAudio.src !== ayah.audio) {
   quranAudio.src = ayah.audio;
+  quranAudio.currentTime = 0;
+}
 
   quranAudio.play()
     .then(() => {
