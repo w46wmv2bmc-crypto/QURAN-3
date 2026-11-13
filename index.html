@@ -496,21 +496,14 @@ function speakArabic(text, button) {
     return;
   }
 
-  if (window.speechSynthesis.speaking) {
-    window.speechSynthesis.cancel();
+  window.speechSynthesis.cancel();
 
-    if (currentAdhkarButton) {
-      currentAdhkarButton.textContent = "🔊 گوێگرتن";
-    }
-
-    if (currentAdhkarButton === button) {
-      currentAdhkarButton = null;
-      return;
-    }
+  if (currentAdhkarButton) {
+    currentAdhkarButton.textContent = "🔊 گوێگرتن";
   }
 
   const utterance = new SpeechSynthesisUtterance(text);
- utterance.lang = "ar";
+  utterance.lang = "ar";
   utterance.rate = 0.8;
 
   currentAdhkarButton = button;
@@ -522,12 +515,14 @@ function speakArabic(text, button) {
   };
 
   utterance.onerror = (event) => {
-  button.textContent = "🔊 گوێگرتن";
-  currentAdhkarButton = null;
-  alert("هەڵەی دەنگ: " + event.error);
-};
+    button.textContent = "🔊 گوێگرتن";
+    currentAdhkarButton = null;
+    alert("هەڵەی دەنگ: " + event.error);
+  };
 
-  window.speechSynthesis.speak(utterance);
+  setTimeout(() => {
+    window.speechSynthesis.speak(utterance);
+  }, 200);
 }
 
 function renderAdhkar(items, targetId) {
