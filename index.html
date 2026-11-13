@@ -729,7 +729,7 @@ async function openSurah(surah) {
     const audioButton = document.createElement("button");
     audioButton.textContent = "▶️ دەنگی خوێندنەوە";
 
-    audioButton.onclick = () => playSurahAudio(surah);
+    audioButton.onclick = () => playSurahAudio(surah, audioButton);
 
     verses.prepend(audioButton);
 
@@ -739,10 +739,21 @@ async function openSurah(surah) {
   }
 }
 
-async function playSurahAudio(surah) {
-  try {
-    quranAudio.pause();
+let quranAudioAyahs = [];
+let quranAudioIndex = 0;
+let quranAudioButton = null;
 
+async function playSurahAudio(surah, button) {
+  quranAudio.pause();
+
+  if (quranAudioButton) {
+    quranAudioButton.textContent = "▶️ دەنگی خوێندنەوە";
+  }
+
+  quranAudioButton = button;
+  button.textContent = "⏳ چاوەڕێ بکە...";
+
+  try {
     const edition = reciterSelect
       ? reciterSelect.value
       : "ar.alafasy";
@@ -754,14 +765,48 @@ async function playSurahAudio(surah) {
 
     const result = await response.json();
 
-    const audioUrl = result.data.ayahs[0].audio;
+    if (
+      result.code !== 200 ||
+      !result.data ||
+      !result.data.ayahs ||
+      result.data.ayahs.length === 0
+    ) {
+      throw new Error("Audio not found");
+    }
 
-    quranAudio.src = audioUrl;
-    quranAudio.play();
+    quranAudioAyahs = result.data.ayahs;
+    quranAudioIndex = 0;
+
+    button.textContent = "⏸️ دەنگ لە کاردایە";
+
+    quranAudio.onended = playNextQuranAyah;
+
+    playNextQuranAyah();
 
   } catch (error) {
+    button.textContent = "▶️ دەنگی خوێندنەوە";
     alert("دەنگی خوێندنەوە نەدۆزرایەوە");
   }
+}
+
+function playNextQuranAyah() {
+  if (quranAudioIndex >= quranAudioAyahs.length) {
+    if (quranAudioButton) {
+      quranAudioButton.textContent = "▶️ دەنگی خوێندنەوە";
+    }
+
+    quranAudioButton = null;
+    return;
+  }
+
+  quranAudio.src = quranAudioAyahs[quranAudioIndex].audio;
+  quranAudioIndex++;
+
+  quranAudio.play().catch(function() {
+    if (quranAudioButton) {
+      quranAudioButton.textContent = "▶️ دەنگی خوێندنەوە";
+    }
+  });
 }
 
 if (reciterSelect) {
