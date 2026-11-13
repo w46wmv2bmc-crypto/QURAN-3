@@ -584,10 +584,13 @@ function renderAdhkar(items, targetId) {
 
 const sound = document.createElement("button");
 sound.textContent = "🔊 گوێگرتن";
-
 sound.onclick = () => {
-  speakArabic(item.arabic, sound);
+  const audioIndex =
+    targetId === "morningList" ? index : index + 8;
+
+  playAdhkarAudio(audioIndex, sound);
 };
+
 
 card.append(title, arabic, progress, add, reset, sound);
 container.appendChild(card);
