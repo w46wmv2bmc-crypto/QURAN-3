@@ -687,6 +687,53 @@ function speakArabic(text, button) {
 }
 
 
+
+let adhkarAudio = new Audio();
+let currentAdhkarAudioButton = null;
+
+function playAdhkarAudio(index, button, targetId) {
+  const audioFile =
+    targetId === "morningList" ? "142.mp3" : "143.mp3";
+
+  if (currentAdhkarAudioButton === button) {
+    if (!adhkarAudio.paused) {
+      adhkarAudio.pause();
+      button.textContent = "▶️ بەردەوامبوون";
+    } else {
+      adhkarAudio.play().then(() => {
+        button.textContent = "⏸️ وەستان";
+      }).catch(() => {
+        button.textContent = "🔊 گوێگرتن";
+      });
+    }
+    return;
+  }
+
+  if (currentAdhkarAudioButton) {
+    currentAdhkarAudioButton.textContent = "🔊 گوێگرتن";
+  }
+
+  adhkarAudio.pause();
+  adhkarAudio.currentTime = 0;
+  adhkarAudio.src = audioFile;
+
+  currentAdhkarAudioButton = button;
+  button.textContent = "⏳ چاوەڕێ بکە...";
+
+  adhkarAudio.onended = () => {
+    button.textContent = "🔊 گوێگرتن";
+    currentAdhkarAudioButton = null;
+  };
+
+  adhkarAudio.play().then(() => {
+    button.textContent = "⏸️ وەستان";
+  }).catch(() => {
+    button.textContent = "🔊 گوێگرتن";
+    currentAdhkarAudioButton = null;
+    alert("فایلی دەنگ نەدۆزرایەوە.");
+  });
+}
+
 function renderAdhkar(items, targetId) {
   const container = document.getElementById(targetId);
   if (!container) return;
@@ -736,21 +783,18 @@ function renderAdhkar(items, targetId) {
       add.textContent = "📿 زیادکردن";
     };
 
-const sound = document.createElement("button");
-sound.textContent = "🔊 گوێگرتن";
-sound.onclick = () => {
-  const audioIndex =
-    targetId === "morningList" ? index : index + 8;
+    const sound = document.createElement("button");
+    sound.textContent = "🔊 گوێگرتن";
 
-  playAdhkarAudio(audioIndex, sound);
-};
+    sound.onclick = () => {
+      playAdhkarAudio(index, sound, targetId);
+    };
 
-
-card.append(title, arabic, progress, add, reset, sound);
-container.appendChild(card);
-});
+    card.append(title, arabic, progress, add, reset, sound);
+    container.appendChild(card);
+  });
 }
-    
+
 renderAdhkar(morningListData, "morningList");
 renderAdhkar(eveningListData, "eveningList");
 
@@ -1420,22 +1464,32 @@ let adhkarAudio = new Audio();
 let currentAdhkarAudioButton = null;
 
 
+
 function playAdhkarAudio(index, button) {
-  if (index < 0 || index >= 16) return;
+  if (index < 0) return;
+
+  const section = button.closest("#morning, #evening");
+
+  if (!section) {
+    alert("بەشی زیکرەکە نەدۆزرایەوە.");
+    return;
+  }
+
+  const audioFile =
+    section.id === "morning" ? "142.mp3" : "143.mp3";
 
   if (currentAdhkarAudioButton === button) {
     if (!adhkarAudio.paused) {
       adhkarAudio.pause();
       button.textContent = "▶️ بەردەوامبوون";
-      return;
     } else {
       adhkarAudio.play().then(() => {
         button.textContent = "⏸️ وەستان";
       }).catch(() => {
         button.textContent = "🔊 گوێگرتن";
       });
-      return;
     }
+    return;
   }
 
   if (currentAdhkarAudioButton) {
@@ -1444,27 +1498,8 @@ function playAdhkarAudio(index, button) {
 
   adhkarAudio.pause();
   adhkarAudio.currentTime = 0;
+  adhkarAudio.src = audioFile;
 
-  const audioFiles = [
-    "audio/adhkar/01.mp3",
-    "audio/adhkar/02.mp3",
-    "audio/adhkar/03.mp3",
-    "audio/adhkar/04.mp3",
-    "audio/adhkar/05.mp3",
-    "audio/adhkar/06.mp3",
-    "audio/adhkar/07.mp3",
-    "audio/adhkar/08.mp3",
-    "audio/adhkar/09.mp3",
-    "audio/adhkar/10.mp3",
-    "audio/adhkar/11.mp3",
-    "audio/adhkar/12.mp3",
-    "audio/adhkar/13.mp3",
-    "audio/adhkar/14.mp3",
-    "audio/adhkar/15.mp3",
-    "audio/adhkar/16.mp3"
-  ];
-
-  adhkarAudio.src = audioFiles[index];
   currentAdhkarAudioButton = button;
   button.textContent = "⏳ چاوەڕێ بکە...";
 
@@ -1481,6 +1516,7 @@ function playAdhkarAudio(index, button) {
     alert("فایلی دەنگ نەدۆزرایەوە.");
   });
 }
+
 
 </script>
 </body>
