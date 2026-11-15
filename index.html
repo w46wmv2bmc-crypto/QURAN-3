@@ -293,6 +293,7 @@ window.onerror = function(message, source, line) {
 };
 
 function showPage(id) {
+ alert("دوگمە کار دەکات: " + id);
   pageIds.forEach(page => {
     const element = document.getElementById(page);
     if (element) {
