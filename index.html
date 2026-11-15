@@ -964,7 +964,7 @@ async function openSurah(surah) {
     audioButton.textContent = "▶️ دەنگی خوێندنەوە";
     audioButton.onclick = () => playSurahAudio(surah, audioButton);
 
-    verses.prepend(audioButton);
+   verses.appendChild(audioButton);
 
   } catch (error) {
     verses.textContent =
