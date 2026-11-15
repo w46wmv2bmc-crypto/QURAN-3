@@ -291,14 +291,25 @@ let qiblaBearing = null;
 window.onerror = function(message, source, line) {
   alert("هەڵەی کۆد: " + message + " | دێڕ: " + line);
 };
+
 function showPage(id) {
   pageIds.forEach(page => {
     const element = document.getElementById(page);
-    if (element) element.style.display = "none";
+    if (element) {
+      element.classList.add("hidden");
+      element.style.display = "none";
+    }
   });
 
   const selected = document.getElementById(id);
-  if (selected) selected.style.display = "block";
+
+  if (!selected) {
+    alert("بەشەکە نەدۆزرایەوە: " + id);
+    return;
+  }
+
+  selected.classList.remove("hidden");
+  selected.style.display = "block";
 
   quranAudio.pause();
   adhanAudio.pause();
@@ -314,6 +325,7 @@ function showPage(id) {
     currentAdhanButton = null;
   }
 }
+
 
 // ===============================
 // ڕێکخستنەکان
