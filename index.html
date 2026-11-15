@@ -1478,62 +1478,6 @@ showPage("home");
 // کۆتایی کۆدەکە
 // ===============================
 
-let adhkarAudio = new Audio();
-let currentAdhkarAudioButton = null;
-
-
-
-function playAdhkarAudio(index, button) {
-  if (index < 0) return;
-
-  const section = button.closest("#morning, #evening");
-
-  if (!section) {
-    alert("بەشی زیکرەکە نەدۆزرایەوە.");
-    return;
-  }
-
-  const audioFile =
-    section.id === "morning" ? "142.mp3" : "143.mp3";
-
-  if (currentAdhkarAudioButton === button) {
-    if (!adhkarAudio.paused) {
-      adhkarAudio.pause();
-      button.textContent = "▶️ بەردەوامبوون";
-    } else {
-      adhkarAudio.play().then(() => {
-        button.textContent = "⏸️ وەستان";
-      }).catch(() => {
-        button.textContent = "🔊 گوێگرتن";
-      });
-    }
-    return;
-  }
-
-  if (currentAdhkarAudioButton) {
-    currentAdhkarAudioButton.textContent = "🔊 گوێگرتن";
-  }
-
-  adhkarAudio.pause();
-  adhkarAudio.currentTime = 0;
-  adhkarAudio.src = audioFile;
-
-  currentAdhkarAudioButton = button;
-  button.textContent = "⏳ چاوەڕێ بکە...";
-
-  adhkarAudio.onended = () => {
-    button.textContent = "🔊 گوێگرتن";
-    currentAdhkarAudioButton = null;
-  };
-
-  adhkarAudio.play().then(() => {
-    button.textContent = "⏸️ وەستان";
-  }).catch(() => {
-    button.textContent = "🔊 گوێگرتن";
-    currentAdhkarAudioButton = null;
-    alert("فایلی دەنگ نەدۆزرایەوە.");
-  });
-}
 
 
 </script>
