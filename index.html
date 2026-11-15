@@ -293,7 +293,8 @@ window.onerror = function(message, source, line) {
 };
 
 function showPage(id) {
- alert("دوگمە کار دەکات: " + id);
+  alert("شوێنی داواکراو: " + id);
+
   pageIds.forEach(page => {
     const element = document.getElementById(page);
     if (element) {
@@ -305,16 +306,19 @@ function showPage(id) {
   const selected = document.getElementById(id);
 
   if (!selected) {
-    alert("بەشەکە نەدۆزرایەوە: " + id);
+    alert("بەشی " + id + " لە HTML نەدۆزرایەوە");
     return;
   }
 
   selected.classList.remove("hidden");
   selected.style.display = "block";
 
-  quranAudio.pause();
-  adhanAudio.pause();
-  window.speechSynthesis.cancel();
+  if (typeof quranAudio !== "undefined") quranAudio.pause();
+  if (typeof adhanAudio !== "undefined") adhanAudio.pause();
+
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
 
   if (currentAdhkarButton) {
     currentAdhkarButton.textContent = "🔊 گوێگرتن";
@@ -326,6 +330,7 @@ function showPage(id) {
     currentAdhanButton = null;
   }
 }
+
 window.showPage = showPage;
 
 // ===============================
