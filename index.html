@@ -843,6 +843,7 @@ async function loadSurahs() {
   }
 }
 
+
 function displaySurahs(surahs) {
   const list = document.getElementById("list");
   if (!list) return;
@@ -850,17 +851,29 @@ function displaySurahs(surahs) {
   list.innerHTML = "";
 
   surahs.forEach(surah => {
-    const button = document.createElement("button");
-    button.className = "surah-button";
-    button.textContent =
+    const item = document.createElement("div");
+    item.className = "surah-button";
+
+    const openButton = document.createElement("button");
+    openButton.textContent =
       surah.number + " - " + surah.name +
       " | " + surah.numberOfAyahs + " ئایەت";
 
-    button.onclick = () => openSurah(surah);
+    openButton.onclick = () => openSurah(surah);
 
-    list.appendChild(button);
+    const audioButton = document.createElement("button");
+    audioButton.textContent = "▶️ دەنگی خوێندنەوە";
+    audioButton.onclick = (event) => {
+      event.stopPropagation();
+      playSurahAudio(surah, audioButton);
+    };
+
+    item.appendChild(openButton);
+    item.appendChild(audioButton);
+    list.appendChild(item);
   });
 }
+
 
 const searchInput = document.getElementById("search");
 
@@ -868,15 +881,17 @@ if (searchInput) {
   searchInput.addEventListener("input", () => {
     const value = searchInput.value.trim().toLowerCase();
 
-    displaySurahs(
-      allSurahs.filter(surah =>
-        surah.name.toLowerCase().includes(value) ||
-        String(surah.number).includes(value) ||
-        surah.englishName.toLowerCase().includes(value)
-      )
-    );
-  });
+    
+displaySurahs(
+  allSurahs.filter(surah =>
+    surah.name.toLowerCase().includes(value) ||
+    String(surah.number).includes(value) ||
+    surah.englishName.toLowerCase().includes(value)
+  )
+);
+});
 }
+
 async function openSurah(surah) {
   currentSurah = surah;
 
