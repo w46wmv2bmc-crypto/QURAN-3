@@ -945,28 +945,51 @@ async function openSurah(surah) {
       card.className = "card";
 
       const arabic = document.createElement("p");
-      arabic.textContent = ayah.text;
-      arabic.style.fontSize = "25px";
-      arabic.style.lineHeight = "2.2";
-      arabic.style.textAlign = "right";
+arabic.textContent = ayah.text;
+arabic.style.fontSize = "25px";
+arabic.style.lineHeight = "2.2";
+arabic.style.textAlign = "right";
 
-      const number = document.createElement("small");
-      number.textContent = "﴿ " + ayah.numberInSurah + " ﴾";
+const number = document.createElement("small");
+number.textContent = "﴿ " + ayah.numberInSurah + " ﴾";
 
-      const kurdish = document.createElement("p");
-      kurdish.textContent = translation
-        ? translation.translation
-        : "وەرگێڕانی کوردی بەردەست نییە";
+const kurdish = document.createElement("p");
+kurdish.textContent = translation
+  ? translation.translation
+  : "وەرگێڕانی کوردی بەردەست نییە";
 
-      card.append(arabic, number, kurdish);
-      verses.appendChild(card);
-    });
+const ayahAudioButton = document.createElement("button");
+ayahAudioButton.textContent = "▶️ دەنگی ئەم ئایەتە";
 
-    const audioButton = document.createElement("button");
-    audioButton.textContent = "▶️ دەنگی خوێندنەوە";
-    audioButton.onclick = () => playSurahAudio(surah, audioButton);
+ayahAudioButton.onclick = async () => {
+  if (window.currentAyahAudio) {
+    window.currentAyahAudio.pause();
+  }
 
-   verses.appendChild(audioButton);
+  const audio = new Audio(
+    `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayah.number}.mp3`
+  );
+
+  window.currentAyahAudio = audio;
+  ayahAudioButton.textContent = "⏸️ لە پەخشکردندایە";
+
+  audio.onended = () => {
+    ayahAudioButton.textContent = "▶️ دەنگی ئەم ئایەتە";
+  };
+
+  audio.onerror = () => {
+    ayahAudioButton.textContent = "▶️ دووبارە هەوڵ بدەرەوە";
+  };
+
+  try {
+    await audio.play();
+  } catch (error) {
+    ayahAudioButton.textContent = "▶️ دووبارە هەوڵ بدەرەوە";
+  }
+};
+
+card.append(arabic, number, kurdish, ayahAudioButton);
+verses.appendChild(card);
 
   } catch (error) {
     verses.textContent =
