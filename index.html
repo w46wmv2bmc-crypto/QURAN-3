@@ -892,6 +892,7 @@ displaySurahs(
 });
 }
 
+
 async function openSurah(surah) {
   currentSurah = surah;
 
@@ -920,15 +921,15 @@ async function openSurah(surah) {
 
     try {
       const translationResponse = await fetch(
-      "https://quranenc.com/api/v1/translation/sura/kurdish_bamoki/" +
+        "https://quranenc.com/api/v1/translation/sura/kurdish_bamoki/" +
         surah.number
       );
 
       if (translationResponse.ok) {
         const translationData = await translationResponse.json();
-      translations = Array.isArray(translationData)
-  ? translationData
-  : (translationData.result || []);
+        translations = Array.isArray(translationData)
+          ? translationData
+          : (translationData.result || []);
       }
     } catch (error) {
       console.log("Translation unavailable");
@@ -945,57 +946,66 @@ async function openSurah(surah) {
       card.className = "card";
 
       const arabic = document.createElement("p");
-arabic.textContent = ayah.text;
-arabic.style.fontSize = "25px";
-arabic.style.lineHeight = "2.2";
-arabic.style.textAlign = "right";
+      arabic.textContent = ayah.text;
+      arabic.style.fontSize = "25px";
+      arabic.style.lineHeight = "2.2";
+      arabic.style.textAlign = "right";
 
-const number = document.createElement("small");
-number.textContent = "﴿ " + ayah.numberInSurah + " ﴾";
+      const number = document.createElement("small");
+      number.textContent = "﴿ " + ayah.numberInSurah + " ﴾";
 
-const kurdish = document.createElement("p");
-kurdish.textContent = translation
-  ? translation.translation
-  : "وەرگێڕانی کوردی بەردەست نییە";
+      const kurdish = document.createElement("p");
+      kurdish.textContent = translation
+        ? translation.translation
+        : "وەرگێڕانی کوردی بەردەست نییە";
 
-const ayahAudioButton = document.createElement("button");
-ayahAudioButton.textContent = "▶️ دەنگی ئەم ئایەتە";
+      const ayahAudioButton = document.createElement("button");
+      ayahAudioButton.textContent = "▶️ دەنگی ئەم ئایەتە";
 
-ayahAudioButton.onclick = async () => {
-  if (window.currentAyahAudio) {
-    window.currentAyahAudio.pause();
-  }
+      ayahAudioButton.onclick = async () => {
+        if (window.currentAyahAudio) {
+          window.currentAyahAudio.pause();
+        }
 
-  const audio = new Audio(
-    `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayah.number}.mp3`
-  );
+        const audio = new Audio(
+          `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayah.number}.mp3`
+        );
 
-  window.currentAyahAudio = audio;
-  ayahAudioButton.textContent = "⏸️ لە پەخشکردندایە";
+        window.currentAyahAudio = audio;
+        ayahAudioButton.textContent = "⏸️ لە پەخشکردندایە";
 
-  audio.onended = () => {
-    ayahAudioButton.textContent = "▶️ دەنگی ئەم ئایەتە";
-  };
+        audio.onended = () => {
+          ayahAudioButton.textContent = "▶️ دەنگی ئەم ئایەتە";
+        };
 
-  audio.onerror = () => {
-    ayahAudioButton.textContent = "▶️ دووبارە هەوڵ بدەرەوە";
-  };
+        audio.onerror = () => {
+          ayahAudioButton.textContent = "▶️ دووبارە هەوڵ بدەرەوە";
+        };
 
-  try {
-    await audio.play();
+        try {
+          await audio.play();
+        } catch (error) {
+          ayahAudioButton.textContent = "▶️ دووبارە هەوڵ بدەرەوە";
+        }
+      };
+
+      card.append(arabic, number, kurdish, ayahAudioButton);
+      verses.appendChild(card);
+    });
+
+    const audioButton = document.createElement("button");
+    audioButton.textContent = "▶️ دەنگی خوێندنەوە";
+    audioButton.onclick = () => playSurahAudio(surah, audioButton);
+
+    verses.appendChild(audioButton);
+
   } catch (error) {
-    ayahAudioButton.textContent = "▶️ دووبارە هەوڵ بدەرەوە";
-  }
-};
-
-card.append(arabic, number, kurdish, ayahAudioButton);
-verses.appendChild(card);
-
-  } catch (error) {
+    console.log(error);
     verses.textContent =
       "نەتوانرا زانیارییەکان بهێنرێن. ئینتەرنێتەکەت بپشکنە.";
   }
 }
+
 
 let quranAudioAyahs = [];
 let quranAudioIndex = 0;
