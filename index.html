@@ -952,11 +952,14 @@ async function openSurah(surah) {
       const card = document.createElement("div");
       card.className = "card";
 
-      const arabic = document.createElement("p");
-      arabic.textContent = ayah.text;
-      arabic.style.fontSize = "25px";
-      arabic.style.lineHeight = "2.2";
-      arabic.style.textAlign = "right";
+      
+const arabic = document.createElement("p");
+arabic.className = "ayah-text quran-text";
+arabic.textContent = ayah.text;
+arabic.style.fontSize = "27px";
+arabic.style.lineHeight = "2.5";
+arabic.style.textAlign = "center";
+arabic.style.direction = "rtl";
 
       const number = document.createElement("small");
       number.textContent = "﴿ " + ayah.numberInSurah + " ﴾";
