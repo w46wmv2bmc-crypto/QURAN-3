@@ -1404,11 +1404,14 @@ function getQibla() {
 
 // هەوڵدان بۆ بەکارهێنانی کۆمپاسی مۆبایل
 
+
 async function enableCompass() {
   const message = document.getElementById("qiblaMessage");
 
   if (typeof DeviceOrientationEvent === "undefined") {
-    if (message) message.textContent = "ئەم ئامێرە پشتگیری کۆمپاس ناکات.";
+    if (message) {
+      message.textContent = "ئەم ئامێرە پشتگیری کۆمپاس ناکات.";
+    }
     return;
   }
 
@@ -1417,20 +1420,51 @@ async function enableCompass() {
       const permission = await DeviceOrientationEvent.requestPermission();
 
       if (permission !== "granted") {
-        if (message) message.textContent = "مۆڵەتی کۆمپاس پەسەند نەکرا.";
+        if (message) {
+          message.textContent = "مۆڵەتی کۆمپاس پەسەند نەکرا.";
+        }
         return;
       }
     }
 
     window.removeEventListener("deviceorientation", updateCompass, true);
-    window.addEventListener("deviceorientation", updateCompass, true);
+    window.removeEventListener("deviceorientationabsolute", updateCompass, true);
 
-    if (message) message.textContent = "کۆمپاس چالاکە؛ مۆبایلەکەت بە هێواشی بجوڵێنە.";
+    window.addEventListener("deviceorientation", updateCompass, true);
+    window.addEventListener("deviceorientationabsolute", updateCompass, true);
+
+    if (message) {
+      message.textContent = "کۆمپاس چالاک کرا؛ مۆبایلەکەت بجوڵێنە.";
+    }
 
   } catch (error) {
-    if (message) message.textContent = "نەتوانرا کۆمپاس چالاک بکرێت.";
+    if (message) {
+      message.textContent = "مۆڵەتی کۆمپاس نەدرا یان سێنسەر بەردەست نییە.";
+    }
   }
 }
+
+function updateCompass(event) {
+  if (qiblaBearing === null) return;
+
+  let heading = null;
+
+  if (typeof event.webkitCompassHeading === "number") {
+    heading = event.webkitCompassHeading;
+  } else if (typeof event.alpha === "number") {
+    heading = (360 - event.alpha) % 360;
+  }
+
+  if (heading === null) return;
+
+  const angle = (qiblaBearing - heading + 360) % 360;
+  const arrow = document.getElementById("qiblaArrow");
+
+  if (arrow) {
+    arrow.style.transform = "rotate(" + angle + "deg)";
+  }
+}
+
 
 function updateCompass(event) {
   if (qiblaBearing === null) return;
