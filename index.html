@@ -1466,7 +1466,9 @@ function calculateQibla(lat, lon) {
 
   return (toDegrees(Math.atan2(y, x)) + 360) % 360;
 }
-
+let compassSensorFound = false;
+let compassFallbackTimer = null;
+ 
 function getQibla() {
   const message = document.getElementById("qiblaMessage");
   const degree = document.getElementById("qiblaDegree");
@@ -1487,9 +1489,9 @@ function getQibla() {
       }
 
       if (arrow) {
-        arrow.style.transform =
-          "rotate(" + qiblaBearing + "deg)";
-      }
+  arrow.style.transform =
+    "translateX(-50%) rotate(" + qiblaBearing + "deg)";
+}
 
       if (message) {
         message.textContent =
@@ -1516,10 +1518,13 @@ function getQibla() {
 
 async function enableCompass() {
   const message = document.getElementById("qiblaMessage");
+  const arrow = document.getElementById("qiblaArrow");
+
+  compassSensorFound = false;
 
   if (typeof DeviceOrientationEvent === "undefined") {
     if (message) {
-      message.textContent = "ئەم ئامێرە پشتگیری کۆمپاس ناکات.";
+      message.textContent = "ئەم ئامێرە سێنسەری کۆمپاسی نییە؛ ئاراستەی قیبڵە بە پلە پیشان دەدرێت.";
     }
     return;
   }
@@ -1529,9 +1534,7 @@ async function enableCompass() {
       const permission = await DeviceOrientationEvent.requestPermission();
 
       if (permission !== "granted") {
-        if (message) {
-          message.textContent = "مۆڵەتی کۆمپاس پەسەند نەکرا.";
-        }
+        if (message) message.textContent = "مۆڵەتی کۆمپاس پەسەند نەکرا.";
         return;
       }
     }
@@ -1543,12 +1546,19 @@ async function enableCompass() {
     window.addEventListener("deviceorientationabsolute", updateCompass, true);
 
     if (message) {
-      message.textContent = "کۆمپاس چالاک کرا؛ مۆبایلەکەت بجوڵێنە.";
+      message.textContent = "چاوەڕێی سێنسەری کۆمپاس بە...";
     }
+
+    setTimeout(() => {
+      if (!compassSensorFound && message) {
+        message.textContent =
+          "ئەم مۆبایلە سێنسەری کۆمپاسی نییە؛ ئاراستەی قیبڵە بە پلە پیشان دەدرێت.";
+      }
+    }, 3000);
 
   } catch (error) {
     if (message) {
-      message.textContent = "مۆڵەتی کۆمپاس نەدرا یان سێنسەر بەردەست نییە.";
+      message.textContent = "نەتوانرا کۆمپاس چالاک بکرێت.";
     }
   }
 }
@@ -1560,39 +1570,25 @@ function updateCompass(event) {
 
   if (typeof event.webkitCompassHeading === "number") {
     heading = event.webkitCompassHeading;
-  } else if (typeof event.alpha === "number") {
+  } else if (event.absolute === true && typeof event.alpha === "number") {
     heading = (360 - event.alpha) % 360;
   }
 
   if (heading === null) return;
 
-  const angle = (qiblaBearing - heading + 360) % 360;
-  const arrow = document.getElementById("qiblaArrow");
-
-  if (arrow) {
-    arrow.style.transform = "rotate(" + angle + "deg)";
-  }
-}
-
-
-function updateCompass(event) {
-  if (qiblaBearing === null) return;
-
-  let heading = null;
-
-  if (typeof event.webkitCompassHeading === "number") {
-    heading = event.webkitCompassHeading;
-  } else if (typeof event.alpha === "number") {
-    heading = (360 - event.alpha) % 360;
-  }
-
-  if (heading === null) return;
+  compassSensorFound = true;
 
   const angle = (qiblaBearing - heading + 360) % 360;
   const arrow = document.getElementById("qiblaArrow");
 
   if (arrow) {
-    arrow.style.transform = "rotate(" + angle + "deg)";
+    arrow.style.transform =
+      "translateX(-50%) rotate(" + angle + "deg)";
+  }
+
+  const message = document.getElementById("qiblaMessage");
+  if (message) {
+    message.textContent = "کۆمپاس چالاکە؛ ئاراستەی قیبڵە دیارە.";
   }
 }
 
