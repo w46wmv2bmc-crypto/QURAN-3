@@ -1439,6 +1439,8 @@ function updateCompass(event) {
 
   if (typeof event.webkitCompassHeading === "number") {
     heading = event.webkitCompassHeading;
+  } else if (typeof event.alpha === "number") {
+    heading = (360 - event.alpha) % 360;
   }
 
   if (heading === null) return;
