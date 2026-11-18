@@ -1378,45 +1378,27 @@ async function enableCompass() {
   const message = document.getElementById("qiblaMessage");
 
   if (typeof DeviceOrientationEvent === "undefined") {
-    if (message) {
-      message.textContent =
-        "ئەم ئامێرە پشتگیری کۆمپاسی ئەلیکترۆنی ناکات.";
-    }
+    if (message) message.textContent = "ئەم ئامێرە پشتگیری کۆمپاس ناکات.";
     return;
   }
 
   try {
-    if (
-      typeof DeviceOrientationEvent.requestPermission === "function"
-    ) {
-      const permission =
-        await DeviceOrientationEvent.requestPermission();
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      const permission = await DeviceOrientationEvent.requestPermission();
 
       if (permission !== "granted") {
-        if (message) {
-          message.textContent =
-            "ڕێگەپێدان بۆ کۆمپاس پەسەند نەکرا.";
-        }
+        if (message) message.textContent = "مۆڵەتی کۆمپاس پەسەند نەکرا.";
         return;
       }
     }
 
-    window.addEventListener(
-      "deviceorientation",
-      updateCompass,
-      true
-    );
+    window.removeEventListener("deviceorientation", updateCompass, true);
+    window.addEventListener("deviceorientation", updateCompass, true);
 
-    if (message) {
-      message.textContent =
-        "کۆمپاس چالاک کرا. مۆبایلەکەت بجوڵێنە.";
-    }
+    if (message) message.textContent = "کۆمپاس چالاکە؛ مۆبایلەکەت بە هێواشی بجوڵێنە.";
 
   } catch (error) {
-    if (message) {
-      message.textContent =
-        "نەتوانرا کۆمپاس چالاک بکرێت.";
-    }
+    if (message) message.textContent = "نەتوانرا کۆمپاس چالاک بکرێت.";
   }
 }
 
@@ -1427,17 +1409,15 @@ function updateCompass(event) {
 
   if (typeof event.webkitCompassHeading === "number") {
     heading = event.webkitCompassHeading;
-  } else if (typeof event.alpha === "number") {
-    heading = 360 - event.alpha;
   }
 
   if (heading === null) return;
 
+  const angle = (qiblaBearing - heading + 360) % 360;
   const arrow = document.getElementById("qiblaArrow");
 
   if (arrow) {
-    arrow.style.transform =
-      "rotate(" + (qiblaBearing - heading) + "deg)";
+    arrow.style.transform = "rotate(" + angle + "deg)";
   }
 }
 
