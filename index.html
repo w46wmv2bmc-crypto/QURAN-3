@@ -279,20 +279,36 @@ select{
 </section>
 
 <section id="qibla" class="hidden">
- <button class="back" onclick="showPage('home')">⬅ پەڕەی سەرەکی</button>
- <h2 class="page-title">🧭 قیبلەنما</h2>
- <div class="home-card">
-  <p>شوێنی مۆبایلەکەت دیاری بکە بۆ دۆزینەوەی ئاراستەی قیبلە.</p>
-  <div id="qiblaCompass">
-  <span class="north-label">N</span>
-  <span id="qiblaArrow">▲</span>
-</div>
-  <h2 id="qiblaDegree">—°</h2>
-  <p id="qiblaMessage">شوێنەکەت دیاری نەکراوە</p>
-  <button onclick="getQibla()">📍 دیاریکردنی شوێن</button>
-  <button onclick="enableCompass()">🧭 چالاککردنی کۆمپاس</button>
- </div>
- <div class="ad-banner">شوێنی بانەری ڕیکلام</div>
+  <button class="back" onclick="showPage('home')">⬅ پەڕەی سەرەکی</button>
+
+  <h2 class="page-title">🧭 قیبلەنما</h2>
+
+  <div class="home-card qibla-card">
+    <p class="qibla-subtitle">ئاراستەی قیبڵە بۆ کەعبەی پیرۆز</p>
+
+    <div id="qiblaCompass" class="qibla-compass">
+      <div class="compass-ring">
+        <span class="north-label">N</span>
+        <span class="south-label">S</span>
+        <span class="east-label">E</span>
+        <span class="west-label">W</span>
+        <div class="compass-ticks"></div>
+      </div>
+
+      <span id="qiblaArrow">▲</span>
+      <div class="kaaba-center">🕋</div>
+    </div>
+
+    <div class="qibla-degree-box">
+      <h2 id="qiblaDegree">—°</h2>
+      <p>پلەی ئاراستەی قیبڵە</p>
+    </div>
+
+    <p id="qiblaMessage">شوێنەکەت دیاری نەکراوە</p>
+
+    <button onclick="getQibla()">📍 دیاریکردنی شوێن</button>
+    <button onclick="enableCompass()">🧭 چالاککردنی کۆمپاس</button>
+  </div>
 </section>
 
 <section id="settings" class="hidden">
