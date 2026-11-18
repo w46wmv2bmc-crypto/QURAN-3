@@ -121,6 +121,33 @@ select{
   font-kerning: normal;
   font-variant-ligatures: normal;
 }
+ #qiblaCompass {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 25px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.north-label {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #f5d36e;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#qiblaArrow {
+  display: inline-block;
+  font-size: 85px;
+  color: #f5d36e;
+  transition: transform .2s ease;
+  text-shadow: 0 0 12px rgba(245,211,110,.5);
+}
 </style>
 </head>
 <body>
