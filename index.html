@@ -98,7 +98,20 @@ footer{
  font-size:65px;background:radial-gradient(circle,#104332,#031b16);
  position:relative
 }
-#qiblaArrow{display:inline-block;transition:transform .2s}
+#qiblaArrow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 105px;
+  background: linear-gradient(to top, #d6a83f, #fff0a6);
+  clip-path: polygon(50% 0, 100% 25%, 65% 25%, 65% 100%, 35% 100%, 35% 25%, 0 25%);
+  transform: translate(-50%, -100%) rotate(0deg);
+  transform-origin: 50% 100%;
+  z-index: 3;
+  filter: drop-shadow(0 0 8px #f5d36e);
+  transition: transform .3s ease;
+}
 select{
  max-width:100%;padding:13px;border-radius:12px;
  background:#0b382b;color:white;border:1px solid #c9a64b;
@@ -1474,7 +1487,9 @@ function getQibla() {
   const degree = document.getElementById("qiblaDegree");
   const arrow = document.getElementById("qiblaArrow");
 
-  if (message) message.textContent = "تکایە چاوەڕێ بکە...";
+  if (message) {
+    message.textContent = "تکایە چاوەڕێ بکە...";
+  }
 
   navigator.geolocation.getCurrentPosition(
     position => {
@@ -1484,14 +1499,13 @@ function getQibla() {
       qiblaBearing = calculateQibla(lat, lon);
 
       if (degree) {
-        degree.textContent =
-          qiblaBearing.toFixed(1) + "°";
+        degree.textContent = qiblaBearing.toFixed(1) + "°";
       }
 
       if (arrow) {
-  arrow.style.transform =
-    "translateX(-50%) rotate(" + qiblaBearing + "deg)";
-}
+        arrow.style.transform =
+          "translate(-50%, -100%) rotate(" + qiblaBearing + "deg)";
+      }
 
       if (message) {
         message.textContent =
@@ -1502,8 +1516,7 @@ function getQibla() {
     },
     () => {
       if (message) {
-        message.textContent =
-          "تکایە ڕێگە بە شوێنەکەت بدە.";
+        message.textContent = "تکایە ڕێگە بە شوێنەکەت بدە.";
       }
     },
     {
@@ -1582,9 +1595,9 @@ function updateCompass(event) {
   const arrow = document.getElementById("qiblaArrow");
 
   if (arrow) {
-    arrow.style.transform =
-      "translateX(-50%) rotate(" + angle + "deg)";
-  }
+  arrow.style.transform =
+    "translate(-50%, -100%) rotate(" + angle + "deg)";
+}
 
   const message = document.getElementById("qiblaMessage");
   if (message) {
