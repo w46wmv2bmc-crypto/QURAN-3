@@ -100,15 +100,23 @@ footer{
 }
 #qiblaArrow {
   position: absolute;
-  left: 50%;
-  top: 50%;
   width: 8px;
   height: 105px;
+  left: 50%;
+  top: 50%;
   background: linear-gradient(to top, #d6a83f, #fff0a6);
-  clip-path: polygon(50% 0, 100% 25%, 65% 25%, 65% 100%, 35% 100%, 35% 25%, 0 25%);
+  clip-path: polygon(
+    50% 0,
+    100% 25%,
+    65% 25%,
+    65% 100%,
+    35% 100%,
+    35% 25%,
+    0 25%
+  );
   transform: translate(-50%, -100%) rotate(0deg);
   transform-origin: 50% 100%;
-  z-index: 3;
+  z-index: 5;
   filter: drop-shadow(0 0 8px #f5d36e);
   transition: transform .3s ease;
 }
@@ -198,19 +206,7 @@ select{
 .east-label { right: 5px; top: 50%; transform: translateY(-50%); }
 .west-label { left: 5px; top: 50%; transform: translateY(-50%); }
 
-#qiblaArrow {
-  position: absolute;
-  top: 17px;
-  left: 50%;
-  transform: translateX(-50%) rotate(0deg);
-  transform-origin: 50% 125px;
-  color: #ffe18a;
-  font-size: 76px;
-  line-height: 1;
-  z-index: 3;
-  filter: drop-shadow(0 0 9px rgba(255,220,120,.8));
-  transition: transform .35s ease;
-}
+
 
 .kaaba-center {
   position: relative;
