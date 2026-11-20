@@ -1572,6 +1572,7 @@ async function enableCompass() {
   }
 }
 
+
 function updateCompass(event) {
   if (qiblaBearing === null) return;
 
@@ -1579,7 +1580,10 @@ function updateCompass(event) {
 
   if (typeof event.webkitCompassHeading === "number") {
     heading = event.webkitCompassHeading;
-  } else if (event.absolute === true && typeof event.alpha === "number") {
+  } else if (
+    event.absolute === true &&
+    typeof event.alpha === "number"
+  ) {
     heading = (360 - event.alpha) % 360;
   }
 
@@ -1588,18 +1592,22 @@ function updateCompass(event) {
   compassSensorFound = true;
 
   const angle = (qiblaBearing - heading + 360) % 360;
+
   const arrow = document.getElementById("qiblaArrow");
 
   if (arrow) {
-  arrow.style.transform =
-  "translate(-50%, -100%) rotate("
-}
+    arrow.style.transform =
+      "translate(-50%, -100%) rotate(" + angle + "deg)";
+  }
 
   const message = document.getElementById("qiblaMessage");
+
   if (message) {
-    message.textContent = "کۆمپاس چالاکە؛ ئاراستەی قیبڵە دیارە.";
+    message.textContent =
+      "کۆمپاس چالاکە؛ ئاراستەی قیبلە دیارە.";
   }
 }
+
 
 // ===============================
 // ئاگادارکردنەوەی کاتی نوێژ
